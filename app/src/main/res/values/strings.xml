@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Ai-Recipe Finder</string>
+    <string name="no_recipes_available_txt">There are no recipes available.</string>
 </resources>

@@ -7,9 +7,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.ai_recipefinder.data.remote.RecipeRepository
+import com.example.ai_recipefinder.data.remote.RetrofitClient
 import com.example.ai_recipefinder.ui.theme.AiRecipeFinderTheme
+import com.example.ai_recipefinder.viewmodel.RecipeViewModel
+import com.example.ai_recipefinder.views.HomeScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,24 +26,26 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 )
                 {
-                    HomeScreen()
+                    val repository = RecipeRepository(RetrofitClient.api)
+                    val viewModel = remember { RecipeViewModel(repository) }
+                    HomeScreen(viewModel)
                 }
             }
         }
     }
 }
 
-//@Composable
-//fun HomeScreen(modifier: Modifier = Modifier) {
-//    Text(text = "Hello",
-//        modifier = modifier
-//    )
-//}
-
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     AiRecipeFinderTheme {
-        HomeScreen()
+        Surface(
+            modifier = Modifier.fillMaxSize()
+        )
+        {
+            val repository = RecipeRepository(RetrofitClient.api)
+            val viewModel = remember { RecipeViewModel(repository) }
+            HomeScreen(viewModel)
+        }
     }
 }
