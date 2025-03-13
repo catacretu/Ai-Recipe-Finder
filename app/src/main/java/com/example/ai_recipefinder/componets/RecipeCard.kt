@@ -1,6 +1,7 @@
 package com.example.ai_recipefinder.componets
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,12 +31,13 @@ import androidx.compose.ui.unit.sp
 import com.example.ai_recipefinder.data.entity.Recipe
 
 @Composable
-fun RecipeCard(recipe: Recipe, onFavoriteClick: (Recipe) -> Unit) {
+fun RecipeCard(recipe: Recipe, onFavoriteClick: (Recipe) -> Unit, onRecipeClick: (Recipe) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .height(100.dp),
+            .height(100.dp)
+            .clickable { onRecipeClick(recipe) },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(Color.White)

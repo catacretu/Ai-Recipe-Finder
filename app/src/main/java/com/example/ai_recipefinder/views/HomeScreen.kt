@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.ai_recipefinder.R
 import com.example.ai_recipefinder.componets.RecipeCard
 import com.example.ai_recipefinder.componets.SearchBar
@@ -31,8 +32,8 @@ import com.example.ai_recipefinder.data.saver.RecipeListSaver
 import com.example.ai_recipefinder.viewmodel.RecipeViewModel
 
 @Composable
-fun HomeScreen(viewModel: RecipeViewModel) {
-    val recipes by viewModel.recipes.observeAsState(emptyList())
+fun HomeScreen(navController: NavController, recipeViewModel: RecipeViewModel) {
+    val recipes by recipeViewModel.recipes.observeAsState(emptyList())
 
     Column(
         modifier = Modifier
@@ -40,7 +41,7 @@ fun HomeScreen(viewModel: RecipeViewModel) {
             .padding(16.dp)
     ) {
         Spacer(modifier = Modifier.height(40.dp))
-        SearchBar(viewModel)
+        SearchBar(recipeViewModel)
         Spacer(modifier = Modifier.height(35.dp))
 
         Text(
@@ -62,27 +63,36 @@ fun HomeScreen(viewModel: RecipeViewModel) {
                 )
             }
         } else {
-            RecipeList(recipes)
+            RecipeList(recipeList = recipes, onRecipeSelected = { selectedRecipe ->
+                recipeViewModel.selectRecipe(selectedRecipe)
+                navController.navigate("recipe_details")
+            })
         }
     }
 }
 
 @Composable
-fun RecipeList(recipeList: List<Recipe>) {
+fun RecipeList(recipeList: List<Recipe>, onRecipeSelected: (Recipe) -> Unit) {
     var recipes by rememberSaveable(stateSaver = RecipeListSaver) {
         mutableStateOf(recipeList)
     }
 
     LazyColumn {
         items(recipes) { recipe ->
-            RecipeCard(recipe) {
-                val index = recipes.indexOf(recipe)
-                if (index != -1) {
-                    recipes = recipes.toMutableList().apply {
-                        this[index] = recipe.copy(isFavourite = !recipe.isFavourite)
+            RecipeCard(
+                recipe,
+                onFavoriteClick = { updatedRecipe ->
+                    val index = recipes.indexOf(recipe)
+                    if (index != -1) {
+                        recipes = recipes.toMutableList().apply {
+                            this[index] = updatedRecipe
+                        }
                     }
+                },
+                onRecipeClick = { selectedRecipe ->
+                    onRecipeSelected(selectedRecipe)
                 }
-            }
+            )
         }
     }
 }

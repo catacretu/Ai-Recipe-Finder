@@ -1,6 +1,7 @@
 package com.example.ai_recipefinder.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ai_recipefinder.data.entity.Recipe
@@ -11,11 +12,16 @@ class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
 
     val recipes: LiveData<List<Recipe>> = repository.recipes
     val isLoading: LiveData<Boolean> = repository.isLoading
+    private val _selectedRecipe = MutableLiveData<Recipe?>()
+    val selectedRecipe: LiveData<Recipe?> = _selectedRecipe
 
     fun searchRecipes(query: String) {
         viewModelScope.launch {
             repository.fetchRecipes(query)
         }
+    }
+    fun selectRecipe(recipe: Recipe) {
+        _selectedRecipe.value = recipe
     }
 }
 

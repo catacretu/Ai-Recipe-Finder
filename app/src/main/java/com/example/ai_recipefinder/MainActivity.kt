@@ -10,11 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.ai_recipefinder.componets.NavigationGraph
 import com.example.ai_recipefinder.data.remote.RecipeRepository
 import com.example.ai_recipefinder.data.remote.RetrofitClient
 import com.example.ai_recipefinder.ui.theme.AiRecipeFinderTheme
 import com.example.ai_recipefinder.viewmodel.RecipeViewModel
-import com.example.ai_recipefinder.views.HomeScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,9 +26,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 )
                 {
-                    val repository = RecipeRepository(RetrofitClient.api)
-                    val viewModel = remember { RecipeViewModel(repository) }
-                    HomeScreen(viewModel)
+                    val recipeRepository = RecipeRepository(RetrofitClient.api)
+                    val recipeViewModel = remember { RecipeViewModel(recipeRepository) }
+                    NavigationGraph(recipeViewModel)
                 }
             }
         }
@@ -43,9 +43,9 @@ fun GreetingPreview() {
             modifier = Modifier.fillMaxSize()
         )
         {
-            val repository = RecipeRepository(RetrofitClient.api)
-            val viewModel = remember { RecipeViewModel(repository) }
-            HomeScreen(viewModel)
+            val recipeRepository = RecipeRepository(RetrofitClient.api)
+            val recipeViewModel = remember { RecipeViewModel(recipeRepository) }
+            NavigationGraph(recipeViewModel)
         }
     }
 }
