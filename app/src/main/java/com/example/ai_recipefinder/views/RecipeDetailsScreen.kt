@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.ai_recipefinder.R
 import com.example.ai_recipefinder.data.entity.Recipe
 
 @Composable
@@ -41,8 +42,8 @@ fun RecipeDetailsScreen(recipe: Recipe, onBackClick: () -> Unit) {
                     .fillMaxWidth()
                     .height(250.dp)
                     .background(Color.LightGray),
-                placeholder = painterResource(android.R.drawable.ic_menu_gallery),
-                error = painterResource(android.R.drawable.ic_menu_gallery)
+                placeholder = painterResource(R.drawable.food_placeholder),
+                error = painterResource(R.drawable.food_placeholder)
             )
             IconButton(
                 onClick = onBackClick,

@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.example.ai_recipefinder.R
 
 @Composable
 fun RecipeImage(imageUrl: String) {
@@ -15,8 +16,8 @@ fun RecipeImage(imageUrl: String) {
         painter = rememberAsyncImagePainter(
             ImageRequest.Builder(LocalContext.current)
                 .data(imageUrl)
-                .placeholder(android.R.drawable.ic_menu_gallery)
-                .error(android.R.drawable.ic_menu_gallery)
+                .placeholder(R.drawable.food_placeholder)
+                .error(R.drawable.food_placeholder)
                 .crossfade(true)
                 .build()
         ),
