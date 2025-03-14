@@ -18,9 +18,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
@@ -29,12 +26,11 @@ import com.example.ai_recipefinder.viewmodel.RecipeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(viewModel: RecipeViewModel) {
+fun SearchBar(searchQuery: String, onQueryChanged: (String) -> Unit, viewModel: RecipeViewModel) {
     val isLoading by viewModel.isLoading.observeAsState(false)
-    var searchQuery by remember { mutableStateOf("") }
     OutlinedTextField(
         value = searchQuery,
-        onValueChange = { searchQuery = it },
+        onValueChange = { onQueryChanged(it) },
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White, RoundedCornerShape(24.dp)),

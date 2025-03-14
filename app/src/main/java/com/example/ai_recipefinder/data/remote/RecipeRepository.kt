@@ -20,9 +20,11 @@ class RecipeRepository @Inject constructor(
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading
 
-    suspend fun fetchRecipes(query: String) {
+    suspend fun fetchRecipes(query: String, additionalSearch: Boolean) {
         _isLoading.postValue(true)
 
+        val searchMsg =
+            if (additionalSearch) "Generate another 4 recipes different from before recipes for $query." else "Generate 4 recipes for $query."
         val request = ChatRequest(
             messages = listOf(
                 Message(
@@ -31,7 +33,7 @@ class RecipeRepository @Inject constructor(
                 ),
                 Message(
                     "user",
-                    "Generate 4 recipes for $query. Format response as a JSON array with objects containing title, time, imageUrl, ingredients (list), and instructions."
+                    "$searchMsg Format response as a JSON array with objects containing title, time, imageUrl, ingredients (list), and instructions."
                 )
             )
         )

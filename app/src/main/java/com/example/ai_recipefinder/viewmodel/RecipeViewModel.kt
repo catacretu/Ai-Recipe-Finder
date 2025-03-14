@@ -18,9 +18,9 @@ class RecipeViewModel @Inject constructor(private val repository: RecipeReposito
     private val _selectedRecipe = MutableLiveData<Recipe?>()
     val selectedRecipe: LiveData<Recipe?> = _selectedRecipe
 
-    fun searchRecipes(query: String) {
+    fun searchRecipes(query: String, additionalSearch: Boolean = false) {
         viewModelScope.launch {
-            repository.fetchRecipes(query)
+            repository.fetchRecipes(query, additionalSearch)
         }
     }
     fun selectRecipe(recipe: Recipe) {
