@@ -6,8 +6,11 @@ import com.example.ai_recipefinder.data.entity.ChatRequest
 import com.example.ai_recipefinder.data.entity.Message
 import com.example.ai_recipefinder.data.entity.Recipe
 import org.json.JSONArray
+import javax.inject.Inject
 
-class RecipeRepository(private val recipeService: RecipeService) {
+class RecipeRepository @Inject constructor(
+    private val recipeService: RecipeService
+) {
 
     private val _recipes = MutableLiveData<List<Recipe>>()
     val recipes: LiveData<List<Recipe>> = _recipes

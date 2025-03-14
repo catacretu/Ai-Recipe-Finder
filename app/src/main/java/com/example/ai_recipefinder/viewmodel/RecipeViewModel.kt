@@ -6,9 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ai_recipefinder.data.entity.Recipe
 import com.example.ai_recipefinder.data.remote.RecipeRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
+@HiltViewModel
+class RecipeViewModel @Inject constructor(private val repository: RecipeRepository) : ViewModel() {
 
     val recipes: LiveData<List<Recipe>> = repository.recipes
     val isLoading: LiveData<Boolean> = repository.isLoading
