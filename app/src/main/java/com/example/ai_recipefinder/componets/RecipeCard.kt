@@ -31,7 +31,11 @@ import androidx.compose.ui.unit.sp
 import com.example.ai_recipefinder.data.local.model.Recipe
 
 @Composable
-fun RecipeCard(recipe: Recipe, onFavoriteClick: (Recipe) -> Unit, onRecipeClick: (Recipe) -> Unit) {
+fun RecipeCard(
+    recipe: Recipe,
+    onFavoriteClick: (Recipe) -> Unit,
+    onRecipeClick: (Recipe) -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -59,7 +63,7 @@ fun RecipeCard(recipe: Recipe, onFavoriteClick: (Recipe) -> Unit, onRecipeClick:
                 Text(recipe.title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 Text(recipe.time, fontSize = 14.sp, modifier = Modifier.padding(top = 7.dp))
             }
-            IconButton(onClick = { onFavoriteClick(recipe.copy(isFavourite = !recipe.isFavourite)) }) {
+            IconButton(onClick = { onFavoriteClick(recipe) }) {
                 Icon(
                     imageVector = if (recipe.isFavourite) Icons.Filled.Favorite else Icons.Outlined.Favorite,
                     contentDescription = "Favorite",

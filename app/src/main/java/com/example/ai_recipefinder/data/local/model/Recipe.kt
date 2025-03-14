@@ -5,10 +5,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "recipes")
 data class Recipe(
-    @PrimaryKey val title: String,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val title: String,
     val time: String,
     val imageUrl: String,
     val ingredients: List<String>,
     val instructions: String,
-    val isFavourite: Boolean = false
+    var isFavourite: Boolean = false
 )

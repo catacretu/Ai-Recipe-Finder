@@ -1,5 +1,6 @@
 package com.example.ai_recipefinder.data.local.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -12,5 +13,8 @@ interface RecipeDao {
     suspend fun insertRecipe(recipe: Recipe)
 
     @Query("SELECT * FROM recipes")
-    suspend fun getAllRecipes(): List<Recipe>
+    fun getAllRecipes(): LiveData<List<Recipe>>
+
+    @Query("DELETE FROM recipes WHERE id = :recipeId")
+    suspend fun deleteRecipeById(recipeId: Int)
 }

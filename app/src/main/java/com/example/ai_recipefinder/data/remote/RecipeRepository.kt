@@ -6,6 +6,8 @@ import com.example.ai_recipefinder.data.entity.ChatRequest
 import com.example.ai_recipefinder.data.entity.Message
 import com.example.ai_recipefinder.data.local.dao.RecipeDao
 import com.example.ai_recipefinder.data.local.model.Recipe
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import javax.inject.Inject
 
@@ -21,6 +23,10 @@ class RecipeRepository @Inject constructor(
     val isLoading: LiveData<Boolean> = _isLoading
 
     suspend fun fetchRecipes(query: String, additionalSearch: Boolean) {
+        if (query.isBlank() && _recipes.value!!.isNotEmpty()) {
+            _recipes.postValue(emptyList())
+            return
+        }
         _isLoading.postValue(true)
 
         val searchMsg =
@@ -67,4 +73,33 @@ class RecipeRepository @Inject constructor(
             _isLoading.postValue(false)
         }
     }
+
+    suspend fun insertRecipe(recipe: Recipe) {
+        withContext(Dispatchers.IO) {
+            recipeDao.insertRecipe(recipe)
+        }
+    }
+
+    fun getAllRecipes(): LiveData<List<Recipe>> {
+        return recipeDao.getAllRecipes()
+    }
+
+    suspend fun deleteRecipeById(recipeId: Int) {
+        withContext(Dispatchers.IO) {
+            recipeDao.deleteRecipeById(recipeId)
+        }
+    }
+
+    suspend fun toggleFavorite(recipe: Recipe) {
+        val updatedRecipe = recipe.copy(isFavourite = !recipe.isFavourite)
+
+        if (recipe.isFavourite) {
+            deleteRecipeById(recipe.id)
+        } else {
+            insertRecipe(updatedRecipe)
+        }
+        _recipes.value = _recipes.value?.map { if (it.title == recipe.title) updatedRecipe else it }
+            ?: emptyList()
+    }
+
 }
