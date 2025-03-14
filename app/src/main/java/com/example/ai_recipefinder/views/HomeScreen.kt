@@ -59,7 +59,8 @@ fun HomeScreen(navController: NavController, recipeViewModel: RecipeViewModel) {
             if (!isLoading && searchQuery.isEmpty()) "Favorites" else "Suggested Recipes",
             fontSize = 36.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Black
+            color = Color.Black,
+            modifier = Modifier.padding(start = 16.dp)
         )
         Spacer(modifier = Modifier.height(8.dp))
 
