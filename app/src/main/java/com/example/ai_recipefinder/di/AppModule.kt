@@ -1,11 +1,16 @@
 package com.example.ai_recipefinder.di
 
+import android.content.Context
+import androidx.room.Room
 import com.example.ai_recipefinder.BASE_URL
+import com.example.ai_recipefinder.data.database.RecipeDatabase
+import com.example.ai_recipefinder.data.local.dao.RecipeDao
 import com.example.ai_recipefinder.data.remote.RecipeRepository
 import com.example.ai_recipefinder.data.remote.RecipeService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -39,14 +44,33 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRecipeService(retrofit: Retrofit): RecipeService {
-        return retrofit.create(RecipeService::class.java)
+    fun provideDatabase(@ApplicationContext context: Context): RecipeDatabase {
+        return Room.databaseBuilder(
+            context,
+            RecipeDatabase::class.java,
+            "recipe_database"
+        )
+//            .addTypeConverter(Converters())
+            .build()
     }
 
     @Provides
     @Singleton
-    fun provideRecipeRepository(api: RecipeService): RecipeRepository {
-        return RecipeRepository(api)
+    fun provideRecipeDao(database: RecipeDatabase): RecipeDao {
+        return database.recipeDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRecipeService(retrofit: Retrofit): RecipeService {
+        return retrofit.create(RecipeService::class.java)
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideRecipeRepository(api: RecipeService, dao: RecipeDao): RecipeRepository {
+        return RecipeRepository(api, dao)
     }
 
 }

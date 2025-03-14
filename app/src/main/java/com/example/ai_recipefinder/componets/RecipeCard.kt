@@ -28,7 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.ai_recipefinder.data.entity.Recipe
+import com.example.ai_recipefinder.data.local.model.Recipe
 
 @Composable
 fun RecipeCard(recipe: Recipe, onFavoriteClick: (Recipe) -> Unit, onRecipeClick: (Recipe) -> Unit) {

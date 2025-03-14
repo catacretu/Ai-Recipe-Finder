@@ -4,12 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.ai_recipefinder.data.entity.ChatRequest
 import com.example.ai_recipefinder.data.entity.Message
-import com.example.ai_recipefinder.data.entity.Recipe
+import com.example.ai_recipefinder.data.local.dao.RecipeDao
+import com.example.ai_recipefinder.data.local.model.Recipe
 import org.json.JSONArray
 import javax.inject.Inject
 
 class RecipeRepository @Inject constructor(
-    private val recipeService: RecipeService
+    private val recipeService: RecipeService,
+    private val recipeDao: RecipeDao
 ) {
 
     private val _recipes = MutableLiveData<List<Recipe>>()

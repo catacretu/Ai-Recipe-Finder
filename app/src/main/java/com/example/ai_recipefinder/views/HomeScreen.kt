@@ -27,7 +27,7 @@ import androidx.navigation.NavController
 import com.example.ai_recipefinder.R
 import com.example.ai_recipefinder.componets.RecipeCard
 import com.example.ai_recipefinder.componets.SearchBar
-import com.example.ai_recipefinder.data.entity.Recipe
+import com.example.ai_recipefinder.data.local.model.Recipe
 import com.example.ai_recipefinder.data.saver.RecipeListSaver
 import com.example.ai_recipefinder.viewmodel.RecipeViewModel
 

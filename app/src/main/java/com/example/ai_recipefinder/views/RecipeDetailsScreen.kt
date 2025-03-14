@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.ai_recipefinder.R
-import com.example.ai_recipefinder.data.entity.Recipe
+import com.example.ai_recipefinder.data.local.model.Recipe
 
 @Composable
 fun RecipeDetailsScreen(recipe: Recipe, onBackClick: () -> Unit) {

@@ -2,7 +2,7 @@ package com.example.ai_recipefinder.data.saver
 
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.SaverScope
-import com.example.ai_recipefinder.data.entity.Recipe
+import com.example.ai_recipefinder.data.local.model.Recipe
 
 object RecipeListSaver : Saver<List<Recipe>, List<Map<String, Any>>> {
     override fun restore(value: List<Map<String, Any>>): List<Recipe> {
