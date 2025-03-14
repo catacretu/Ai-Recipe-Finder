@@ -34,6 +34,9 @@ import com.example.ai_recipefinder.viewmodel.RecipeViewModel
 @Composable
 fun HomeScreen(navController: NavController, recipeViewModel: RecipeViewModel) {
     val recipes by recipeViewModel.recipes.observeAsState(emptyList())
+    val favoriteRecipes by recipeViewModel.favoriteRecipes.observeAsState(emptyList()) // Favorite
+    var searchQuery by rememberSaveable { mutableStateOf("") }
+
 
     Column(
         modifier = Modifier
@@ -41,29 +44,42 @@ fun HomeScreen(navController: NavController, recipeViewModel: RecipeViewModel) {
             .padding(16.dp)
     ) {
         Spacer(modifier = Modifier.height(40.dp))
-        SearchBar(recipeViewModel)
+        SearchBar(
+            query = searchQuery,
+            onQueryChanged = { searchQuery = it },
+            viewModel = recipeViewModel
+        )
+
         Spacer(modifier = Modifier.height(35.dp))
 
+        val displayedRecipes = if (searchQuery.isEmpty()) favoriteRecipes else recipes
+
         Text(
-            "Favorites",
+            if (searchQuery.isEmpty()) "Favorites" else "Suggested Recipes",
             fontSize = 36.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black
         )
         Spacer(modifier = Modifier.height(8.dp))
 
-        if (recipes.isEmpty()) {
+        if (displayedRecipes.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = stringResource(R.string.no_recipes_available_txt),
+                    text = stringResource(
+                        if (searchQuery.isEmpty()) R.string.no_favorites_available_txt
+                        else R.string.no_recipes_available_txt
+                    ),
                     textAlign = TextAlign.Center,
                 )
             }
         } else {
-            RecipeList(recipeList = recipes, onRecipeSelected = { selectedRecipe ->
+            RecipeList(
+                recipeList = displayedRecipes,
+                onFavoriteClick = { recipeViewModel.toggleFavorite(it) },
+                onRecipeSelected = { selectedRecipe ->
                 recipeViewModel.selectRecipe(selectedRecipe)
                 navController.navigate("recipe_details")
             })
@@ -72,7 +88,11 @@ fun HomeScreen(navController: NavController, recipeViewModel: RecipeViewModel) {
 }
 
 @Composable
-fun RecipeList(recipeList: List<Recipe>, onRecipeSelected: (Recipe) -> Unit) {
+fun RecipeList(
+    recipeList: List<Recipe>,
+    onFavoriteClick: (Recipe) -> Unit,
+    onRecipeSelected: (Recipe) -> Unit
+) {
     var recipes by rememberSaveable(stateSaver = RecipeListSaver) {
         mutableStateOf(recipeList)
     }
@@ -82,12 +102,13 @@ fun RecipeList(recipeList: List<Recipe>, onRecipeSelected: (Recipe) -> Unit) {
             RecipeCard(
                 recipe,
                 onFavoriteClick = { updatedRecipe ->
-                    val index = recipes.indexOf(recipe)
-                    if (index != -1) {
-                        recipes = recipes.toMutableList().apply {
-                            this[index] = updatedRecipe
-                        }
-                    }
+                    onFavoriteClick(updatedRecipe)
+//                    val index = recipes.indexOf(recipe)
+//                    if (index != -1) {
+//                        recipes = recipes.toMutableList().apply {
+//                            this[index] = updatedRecipe
+//                        }
+//                    }
                 },
                 onRecipeClick = { selectedRecipe ->
                     onRecipeSelected(selectedRecipe)

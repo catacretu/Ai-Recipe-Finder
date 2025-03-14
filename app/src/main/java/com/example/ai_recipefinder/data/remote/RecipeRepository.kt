@@ -5,15 +5,20 @@ import androidx.lifecycle.MutableLiveData
 import com.example.ai_recipefinder.data.entity.ChatRequest
 import com.example.ai_recipefinder.data.entity.Message
 import com.example.ai_recipefinder.data.entity.Recipe
+import com.example.ai_recipefinder.data.local.dao.RecipeDao
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 
-class RecipeRepository(private val recipeService: RecipeService) {
+class RecipeRepository(private val recipeService: RecipeService, private val recipeDao: RecipeDao) {
 
     private val _recipes = MutableLiveData<List<Recipe>>()
     val recipes: LiveData<List<Recipe>> = _recipes
 
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading
+
+    fun getFavoriteRecipes(): LiveData<List<Recipe>> = recipeDao.getAllRecipes()
 
     suspend fun fetchRecipes(query: String) {
         _isLoading.postValue(true)
@@ -58,6 +63,17 @@ class RecipeRepository(private val recipeService: RecipeService) {
             _recipes.postValue(emptyList())
         } finally {
             _isLoading.postValue(false)
+        }
+    }
+
+    suspend fun toggleFavorite(recipe: Recipe) {
+        withContext(Dispatchers.IO) {
+            val existingRecipe = recipeDao.getRecipeByTitle(recipe.title)
+            if (existingRecipe != null) {
+                recipeDao.deleteRecipe(existingRecipe)
+            } else {
+                recipeDao.insertRecipe(recipe.copy(isFavourite = true))
+            }
         }
     }
 }
